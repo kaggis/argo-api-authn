@@ -128,7 +128,7 @@ func CRLCheckRevokedCert(ctx context.Context, cert *x509.Certificate) error {
 	return err
 }
 
-// SynchronizedCheckInCRL checks if a serial number exists within the serial numbers of other revoked certificates
+// CheckInCRL checks if a serial number exists within the serial numbers of other revoked certificates
 func SynchronizedCheckInCRL(doneChan <-chan bool, errChan chan<- error, revokedCerts []pkix.RevokedCertificate, serialNumber *big.Int, wg *sync.WaitGroup) {
 
 loop:

@@ -891,7 +891,7 @@ func (suite *BindingHandlersSuite) TestBindingUpdate() {
 	qB, _ := mockstore.QueryBindingsByUUIDAndName(context.Background(), "b_uuid1", "updated_name")
 	expRespJSON = strings.Replace(expRespJSON, "{{UPDATED_ON}}", qB[0].UpdatedOn, 1)
 	// make sure the updated time is before now
-	updatedTime, _ := time.Parse(utils.ZuluForm, qB[0].UpdatedOn)
+	updatedTime, _ := time.Parse(utils.ZULU_FORM, qB[0].UpdatedOn)
 	suite.True(updatedTime.Before(time.Now().UTC()))
 
 	suite.Equal(200, w.Code)

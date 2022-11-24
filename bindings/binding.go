@@ -3,6 +3,7 @@ package bindings
 import (
 	"context"
 	"fmt"
+
 	"github.com/ARGOeu/argo-api-authn/servicetypes"
 	"github.com/ARGOeu/argo-api-authn/stores"
 	"github.com/ARGOeu/argo-api-authn/utils"

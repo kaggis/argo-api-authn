@@ -3,6 +3,9 @@ package handlers
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/ARGOeu/argo-api-authn/config"
 	"github.com/ARGOeu/argo-api-authn/stores"
 	"github.com/ARGOeu/argo-api-authn/utils"
@@ -10,8 +13,6 @@ import (
 	gorillaContext "github.com/gorilla/context"
 	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
-	"net/http"
-	"time"
 )
 
 // WrapConfig handle wrapper to retrieve configuration
@@ -29,7 +30,7 @@ func WrapConfig(hfn http.HandlerFunc, store stores.Store, config *config.Config)
 	})
 }
 
-// WrapAuth authorizes the user
+//WrapAuth authorizes the user
 func WrapAuth(hfn http.HandlerFunc, store stores.Store) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 

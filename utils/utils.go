@@ -169,5 +169,5 @@ func CopyFields(from interface{}, to interface{}) error {
 
 // ZuluTimeNow returns the current UTC time in zulu format
 func ZuluTimeNow() string {
-	return time.Now().UTC().Format(ZuluForm)
+	return time.Now().UTC().Format(ZULU_FORM)
 }

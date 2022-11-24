@@ -702,7 +702,7 @@ func (suite *BindingHandlersSuite) TestServiceTypeUpdate() {
 	qSt, _ := mockstore.QueryServiceTypes(context.Background(), "updated_name")
 	expRespJSON = strings.Replace(expRespJSON, "{{UPDATED_ON}}", qSt[0].UpdatedOn, 1)
 	// make sure the updated time is before now
-	updatedTime, _ := time.Parse(utils.ZuluForm, qSt[0].UpdatedOn)
+	updatedTime, _ := time.Parse(utils.ZULU_FORM, qSt[0].UpdatedOn)
 	suite.True(updatedTime.Before(time.Now().UTC()))
 	suite.Equal(200, w.Code)
 	suite.Equal(expRespJSON, w.Body.String())

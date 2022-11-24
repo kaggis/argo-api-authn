@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/ARGOeu/argo-api-authn/utils"
 	log "github.com/sirupsen/logrus"
 	officialBson "go.mongodb.org/mongo-driver/bson"
@@ -12,7 +14,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"time"
 )
 
 type MongoStore struct {

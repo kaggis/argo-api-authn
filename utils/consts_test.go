@@ -13,7 +13,7 @@ type ConstsTestSuite struct {
 func (suite *ConstsTestSuite) TestConsts() {
 
 	// test datetime Zulu format
-	suite.Equal("2006-01-02T15:04:05Z", ZuluForm)
+	suite.Equal("2006-01-02T15:04:05Z", ZULU_FORM)
 }
 
 func TestConstsTestSuite(t *testing.T) {

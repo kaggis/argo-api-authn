@@ -30,9 +30,7 @@ func ParseCert(pemData string) *x509.Certificate {
 }
 
 // 2014/05/22 14:18:31 Serial number match: intermediate is revoked.
-//
 //	2014/05/22 14:18:31 certificate is revoked via CRL
-//
 // 2014/05/22 14:18:31 Revoked certificate: misc/intermediate_ca/MobileArmorEnterpriseCA.crt
 var revokedCert = `-----BEGIN CERTIFICATE-----
 MIIEEzCCAvugAwIBAgILBAAAAAABGMGjftYwDQYJKoZIhvcNAQEFBQAwcTEoMCYG

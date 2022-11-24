@@ -820,7 +820,7 @@ func (suite *AuthMethodsHandlersTestSuite) TestAuthMethodUpdateOne() {
 	amU, _ := mockstore.QueryApiKeyAuthMethods(context.Background(), "uuid1", "host1")
 	expRespJSON = strings.Replace(expRespJSON, "{{UPDATED_ON}}", amU[0].UpdatedOn, 1)
 	// make sure the updated time is before now
-	updatedTime, _ := time.Parse(utils.ZuluForm, amU[0].UpdatedOn)
+	updatedTime, _ := time.Parse(utils.ZULU_FORM, amU[0].UpdatedOn)
 	suite.True(updatedTime.Before(time.Now().UTC()))
 	suite.Equal(200, w.Code)
 	suite.Equal(expRespJSON, w.Body.String())
@@ -865,7 +865,7 @@ func (suite *AuthMethodsHandlersTestSuite) TestAuthMethodUpdateOneIllegalFields(
 	amU, _ := mockstore.QueryApiKeyAuthMethods(context.Background(), "uuid1", "host1")
 	expRespJSON = strings.Replace(expRespJSON, "{{UPDATED_ON}}", amU[0].UpdatedOn, 1)
 	// make sure the updated time is before now
-	updatedTime, _ := time.Parse(utils.ZuluForm, amU[0].UpdatedOn)
+	updatedTime, _ := time.Parse(utils.ZULU_FORM, amU[0].UpdatedOn)
 	suite.True(updatedTime.Before(time.Now().UTC()))
 	suite.Equal(200, w.Code)
 	suite.Equal(expRespJSON, w.Body.String())

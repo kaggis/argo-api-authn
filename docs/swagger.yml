@@ -1,0 +1,805 @@
+# ARGO Authentication Service expressed in swagger
+swagger: '2.0'
+info:
+  title: argo-api-authn
+  description: "The purpose of the Authentication Service is to provide the ability to different services to use alternative authentication mechanisms without having to store additional user info or implement new functionalities.The AUTH service typetypeholds various information about a service’s users, hosts, API urls, etc, and leverages them to provide its function."
+  version: "v1"
+  contact:
+    name: ARGO Developers
+    url: http://argoeu.github.io/
+    email: argo-dev@lists.grnet.gr
+
+host: localhost
+basePath: /v1
+schemes:
+  - https
+produces:
+  - application/json
+tags:
+  - name: Bindings
+    description: Bindings under a given service type
+  - name: Authentication Methods
+    description: Authentication Method under a given service type
+  - name: Service Types
+    description: Service Types available in the service
+
+paths:
+
+  /service-types:
+    post:
+      summary: Create a new service type
+      description: |
+        Create a new service type
+      parameters:
+        - $ref: '#/parameters/ApiKey'
+        - name: Service Type information
+          in: body
+          description: Required service type information
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              hosts:
+                type: array
+                items:
+                  type: string
+              auth_types:
+                type: array
+                items:
+                  type: string
+              auth_method:
+                type: string
+                enum: [api-key, headers]
+              type:
+                type: string
+                enum: [ams, web-api]
+      tags:
+        - Service Types
+      responses:
+        201:
+          description: Returns the newly created service type
+          schema:
+            $ref: '#/definitions/ServiceType'
+        400:
+          $ref: "#/responses/400"
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        409:
+          $ref: "#/responses/409"
+        422:
+          $ref: '#/responses/422'
+        500:
+          $ref: "#/responses/500"
+
+    get:
+      summary: Lists all service types
+      description: Lists all service types
+      parameters:
+        - $ref: '#/parameters/ApiKey'
+      tags:
+        - Service Types
+      responses:
+        200:
+          description: Returns a list of all service types
+          schema:
+            $ref: '#/definitions/ServiceTypes'
+        500:
+          $ref: "#/responses/500"
+
+  /service-types/{Name}:
+    get:
+      summary: Retrieve information for a specific service type
+      description: |
+        Retrieve information for a specific service type
+      parameters:
+        - name: Name
+          in: path
+          description: Name of the service type
+          required: true
+          type: string
+        - $ref: '#/parameters/ApiKey'
+      tags:
+        - Service Types
+      responses:
+        200:
+          description: Returns the information of the requested service type
+          schema:
+            $ref: '#/definitions/ServiceType'
+        400:
+          $ref: "#/responses/400"
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        404:
+          $ref: '#/responses/404'
+        500:
+          $ref: "#/responses/500"
+    put:
+      summary: Update a service type
+      description: |
+        Update a service type
+      parameters:
+        - name: Name
+          in: path
+          description: Name of the service type
+          required: true
+          type: string
+        - $ref: '#/parameters/ApiKey'
+        - name: Service Type information
+          in: body
+          description:  Required service type information. When updating, you need to provide information ONLY for the fields(s) you are updating .You can updated one or more fields at a time.
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              hosts:
+                type: array
+                items:
+                  type: string
+              auth_types:
+                type: array
+                items:
+                  type: string
+              auth_method:
+                type: string
+
+      tags:
+        - Service Types
+      responses:
+        200:
+          description: Returns the updated service type
+          schema:
+            $ref: '#/definitions/ServiceType'
+        400:
+          $ref: "#/responses/400"
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        404:
+          $ref: '#/responses/404'
+        409:
+          $ref: '#/responses/409'
+        422:
+          $ref: '#/responses/422'
+        500:
+          $ref: "#/responses/500"
+
+  /service-types/{Name}/authm:
+    post:
+      summary: Create an auth method for the given service-type
+      description: |
+        Retrieve information for a specific service type
+      parameters:
+        - name: Name
+          in: path
+          description: Name of the service type
+          required: true
+          type: string
+        - $ref: '#/parameters/ApiKey'
+        - name: Auth method information
+          in: body
+          description: The auth method will also automatically contain additional information based on the service-type that is associated with. The auth method will be created based on the service-type's auth_method and type fields. E.g. create an api-key auth method for an ams type of service.
+          required: true
+          schema:
+            type: object
+            properties:
+              host:
+                type: string
+              port:
+                type: integer
+              access_key:
+                type: string
+              headers:
+                type: object
+                additionalProperties:
+                  type: string
+      tags:
+        - Service Types
+      responses:
+        201:
+          description: Returns the newly created auth method
+          schema:
+            $ref: '#/definitions/AuthMethod'
+        400:
+          $ref: "#/responses/400"
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        404:
+          $ref: '#/responses/404'
+        409:
+          $ref: '#/responses/409'
+        422:
+          $ref: '#/responses/422'
+        500:
+          $ref: "#/responses/500"
+
+  /service-types/{Name}/hosts/{Host}/authm:
+    get:
+      summary: Retrieve authentication method information for a specific service type and host
+      description: |
+        Retrieve information for a specific service type
+      parameters:
+        - name: Name
+          in: path
+          description: Name of the service type
+          required: true
+          type: string
+        - name: Host
+          in: path
+          description: Name of the host
+          required: true
+          type: string
+        - $ref: '#/parameters/ApiKey'
+      tags:
+        - Service Types
+      responses:
+        200:
+          description: Returns the information of the requested auth method
+          schema:
+            $ref: '#/definitions/AuthMethod'
+        400:
+          $ref: "#/responses/400"
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        404:
+          $ref: '#/responses/404'
+        500:
+          $ref: "#/responses/500"
+    put:
+      summary: Update the existing auth method for the given service type and host
+      description: |
+        Update an auth method
+      parameters:
+        - name: Name
+          in: path
+          description: Name of the service type
+          required: true
+          type: string
+        - name: Host
+          in: path
+          description: Name of the host
+          required: true
+          type: string
+        - $ref: '#/parameters/ApiKey'
+        - name: Auth method information
+          in: body
+          description: You can update one or more fields in one request.
+          required: true
+          schema:
+            type: object
+            properties:
+              service_uuid:
+                type: string
+              port:
+                type: integer
+              host:
+                type: string
+              access_key:
+                type: string
+      tags:
+        - Service Types
+      responses:
+        201:
+          description: Returns the updated auth method
+          schema:
+            $ref: '#/definitions/AuthMethod'
+        400:
+          $ref: "#/responses/400"
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        404:
+          $ref: '#/responses/404'
+        409:
+          $ref: '#/responses/409'
+        422:
+          $ref: '#/responses/422'
+        500:
+          $ref: "#/responses/500"
+    delete:
+      summary: Deletes the authentication method for a specific service type and host
+      description: |
+        Deletes the authentication method for a specific service type and host
+      parameters:
+        - name: Name
+          in: path
+          description: Name of the service type
+          required: true
+          type: string
+        - name: Host
+          in: path
+          description: Name of the host
+          required: true
+          type: string
+        - $ref: '#/parameters/ApiKey'
+      tags:
+        - Service Types
+      responses:
+        204:
+          description: Empty response
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        404:
+          $ref: '#/responses/404'
+        500:
+          $ref: "#/responses/500"
+
+  /service-types/{Name}/hosts/{Host}:authx509:
+    get:
+      summary: Use an x509 ceritficate to retrieve a token from the given service type
+      description: |
+        Retrieve a token from a service type using an x509.
+        *NOTE You need to provide the request with a valid certificate.
+      parameters:
+        - name: Name
+          in: path
+          description: Name of the service type
+          required: true
+          type: string
+        - name: Host
+          in: path
+          description: Name of the host
+          required: true
+          type: string
+      tags:
+        - Service Types
+      responses:
+        200:
+          description: Returns the token
+          schema:
+            $ref: '#/definitions/TokenResponse'
+        400:
+          $ref: "#/responses/400"
+        404:
+          $ref: '#/responses/404'
+        422:
+          $ref: '#/responses/422'
+        500:
+          $ref: "#/responses/500"
+
+  /service-types/{Name}/hosts/{Host}/bindings:
+    get:
+      summary: Retrieve all the bindings under a specific service type and host
+      description: |
+        Retrieve all the bindings under a specific service type and host
+      parameters:
+        - name: Name
+          in: path
+          description: Name of the service type
+          required: true
+          type: string
+        - name: Host
+          in: path
+          description: Name of the host
+          required: true
+          type: string
+        - name: authID
+          in: query
+          description: authID of a specific binding
+          type: string
+          required: false
+        - $ref: '#/parameters/ApiKey'
+      tags:
+        - Service Types
+      responses:
+        200:
+          description: Return a list of bindings
+          schema:
+            $ref: '#/definitions/Bindings'
+        400:
+          $ref: "#/responses/400"
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        404:
+          $ref: '#/responses/404'
+        500:
+          $ref: "#/responses/500"
+
+  /authm:
+    get:
+      summary: Retrieve information for all authentication methods
+      description: |
+        Retrieve information for a specific service type
+      parameters:
+        - $ref: '#/parameters/ApiKey'
+      tags:
+        - Authentication Methods
+      responses:
+        200:
+          description: Returns the information of all authentication methods
+          schema:
+            $ref: '#/definitions/AuthMethods'
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        500:
+          $ref: "#/responses/500"
+
+  /bindings:
+    get:
+      summary: Retrieves all the bindings
+      description: |
+        Retrieves all the bindings
+      parameters:
+        - $ref: '#/parameters/ApiKey'
+      tags:
+        - Bindings
+      responses:
+        200:
+          description: Returns a list containing all the bindings
+          schema:
+            $ref: '#/definitions/Bindings'
+        400:
+          $ref: "#/responses/400"
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        500:
+          $ref: "#/responses/500"
+
+  /bindings/{NAME}:
+
+    post:
+      summary: Create a new binding
+      description: |
+        Create a new binding
+      parameters:
+        - name: NAME
+          in: path
+          description: NAME of the binding
+          required: true
+          type: string
+        - $ref: '#/parameters/ApiKey'
+        - name: binding information
+          in: body
+          description: Required binding information
+          required: true
+          schema:
+            type: object
+            properties:
+              service_uuid:
+                type: string
+              host:
+                type: string
+              auth_identifier:
+                type: string
+              auth_type:
+                type: string
+              unique_key:
+                type: string
+      tags:
+        - Bindings
+      responses:
+        201:
+          description: Returns the newly created binding
+          schema:
+            $ref: '#/definitions/Binding'
+        400:
+          $ref: "#/responses/400"
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        404:
+          $ref: "#/responses/404"
+        409:
+          $ref: "#/responses/409"
+        422:
+          $ref: '#/responses/422'
+        500:
+          $ref: "#/responses/500"
+
+    get:
+      summary: Retrieve information for a specific binding
+      description: |
+        Retrieve information for a specific binding
+      parameters:
+        - name: NAME
+          in: path
+          description: NAME of the binding
+          required: true
+          type: string
+        - $ref: '#/parameters/ApiKey'
+      tags:
+        - Bindings
+      responses:
+        200:
+          description: Returns the information of the requested binding
+          schema:
+            $ref: '#/definitions/Binding'
+        400:
+          $ref: "#/responses/400"
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        404:
+          $ref: '#/responses/404'
+        500:
+          $ref: "#/responses/500"
+    put:
+      summary: Updates a binding
+      description: |
+        Updates a binding
+      parameters:
+        - name: NAME
+          in: path
+          description: NAME of the binding
+          required: true
+          type: string
+        - $ref: '#/parameters/ApiKey'
+        - name: binding information
+          in: body
+          description: Required binding information. When updating, you need to provide information ONLY for the fields(s) you are updating .You can updated one or more fields at a time.
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              service_uuid:
+                type: string
+              host:
+                type: string
+              auth_identifier:
+                type: string
+              auth_type:
+                type: string
+              unique_key:
+                type: string
+      tags:
+        - Bindings
+      responses:
+        200:
+          description: Returns the updated binding
+          schema:
+            $ref: '#/definitions/Binding'
+        400:
+          $ref: "#/responses/400"
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        404:
+          $ref: '#/responses/404'
+        409:
+          $ref: '#/responses/409'
+        422:
+          $ref: '#/responses/422'
+        500:
+          $ref: "#/responses/500"
+    delete:
+      summary: Deletes a binding
+      description: |
+        Deletes a binding
+      parameters:
+        - name: NAME
+          in: path
+          description: NAME of the binding
+          required: true
+          type: string
+        - $ref: '#/parameters/ApiKey'
+      tags:
+        - Bindings
+      responses:
+        204:
+          description: Empty Response
+        401:
+          $ref: "#/responses/401"
+        403:
+          $ref: "#/responses/403"
+        404:
+          $ref: '#/responses/404'
+        500:
+          $ref: "#/responses/500"
+
+parameters:
+  ApiKey:
+    name: key
+    in: query
+    description: user key token for authentication
+    required: true
+    type: string
+    default: SecretKey123
+
+responses:
+  400:
+    description: Invalid argument used
+    schema:
+      $ref: '#/definitions/ErrorMsg'
+  401:
+    description: Unauthorized user based on key
+    schema:
+      $ref: '#/definitions/ErrorMsg'
+  403:
+    description: Access Forbidden for the user on the resource
+    schema:
+      $ref: '#/definitions/ErrorMsg'
+  404:
+    description: Item not found
+    schema:
+      $ref: '#/definitions/ErrorMsg'
+  408:
+    description: Server timed out waiting for the request
+    schema:
+      $ref: '#/definitions/ErrorMsg'
+  409:
+    description: Item already exists!
+    schema:
+      $ref: '#/definitions/ErrorMsg'
+  422:
+    description: Unprocessable Entity
+    schema:
+      $ref: '#/definitions/ErrorMsg'
+  500:
+    description: Internal Error
+    schema:
+      $ref: '#/definitions/ErrorMsg'
+
+
+definitions:
+
+  Binding:
+    type: object
+    properties:
+      name:
+        type: string
+      service_uuid:
+        type: string
+        description: the service type that the binding will belong to
+      host:
+        type: string
+        description: a host assosciated with the declared service type
+      uuid:
+        type: string
+        description: binding's uuid
+      auth_identifier:
+        type: string
+        description: the authentication identifier that will be used to perform the mapping(e.g. a cert's DN)
+      unique_key:
+        type: string
+        description: contains the resource to be used to authenticate against the assosciated service type
+      auth_type:
+        type: string
+        description: the type of authentication that this binding represets(e.g. x509)
+      created_on:
+        type: string
+        description: when the binding was created
+      updated_on:
+        type: string
+        description: when the binding was updated
+      last_auth:
+        type: string
+
+  Bindings:
+    type: object
+    properties:
+      bindings:
+        type: array
+        items:
+          $ref: '#/definitions/Binding'
+
+  ServiceType:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of the topic
+      hosts:
+        type: array
+        items:
+          type: string
+        description: hosts that run this service type
+      auth_types:
+        type: array
+        items:
+          type: string
+        description: supported authentication types
+      auth_method:
+        type: string
+        enum: [api-key, headers]
+        description: the authentication method that the sercvice supports
+      uuid:
+        type: string
+        description: uuid assosiciatd with the service type
+      type:
+        type: string
+        description: service type's type, either AMS or web-api
+      created_on:
+        type: string
+        description: datetime of creation
+      updated_on:
+        type: string
+        description: when the servcie type was updated
+
+  AuthMethods:
+    type: object
+    properties:
+      auth_methods:
+        type: array
+        items:
+          $ref: '#/definitions/AuthMethod'
+
+
+  AuthMethod:
+    type: object
+    properties:
+      access_key:
+        type: string
+        description: key needed too access the service type
+      headers:
+        type: object
+        description: key-value pairs that represnt the headers that are going to be used if the auth method is of type headers
+        additionalProperties:
+          type: string
+      host:
+        type: string
+        description: host of the service type
+      service_uuid:
+        type: string
+        description: uuid that is assosciated with the service the auth method is used for
+      port:
+        type: integer
+        description: port of the service type host
+      type:
+        type: string
+        enum: [api-key, headers]
+      uuid:
+        type: string
+        description: auth method's uuid
+      created_on:
+        type: string
+        description: when the auth method was created
+      updated_on:
+        type: string
+        description: when the auth method was updated
+
+
+  TokenResponse:
+    type: object
+    properties:
+      token:
+        type: string
+
+  ServiceTypes:
+    type: object
+    properties:
+      service_types:
+        type: array
+        items:
+          $ref: '#/definitions/ServiceType'
+
+  ErrorMsg:
+    type: object
+    properties:
+      error:
+        type: object
+        properties:
+          code:
+            type: string
+            description: code of the error
+          message:
+            type: string
+            description: general message of the error
+          status:
+            type: string
+            description: status of the error
