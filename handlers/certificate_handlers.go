@@ -2,8 +2,9 @@ package handlers
 
 import (
 	"context"
-	"github.com/ARGOeu/argo-api-authn/metrics"
 	"net/http"
+
+	"github.com/ARGOeu/argo-api-authn/metrics"
 
 	"github.com/ARGOeu/argo-api-authn/auth"
 	"github.com/ARGOeu/argo-api-authn/authmethods"

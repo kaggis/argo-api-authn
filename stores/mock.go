@@ -2,8 +2,9 @@ package stores
 
 import (
 	"context"
-	"github.com/ARGOeu/argo-api-authn/utils"
 	"reflect"
+
+	"github.com/ARGOeu/argo-api-authn/utils"
 )
 
 type Mockstore struct {

@@ -9,11 +9,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ARGOeu/argo-api-authn/utils"
-	log "github.com/sirupsen/logrus"
 	"net"
 	"strings"
 	"time"
+
+	"github.com/ARGOeu/argo-api-authn/utils"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
